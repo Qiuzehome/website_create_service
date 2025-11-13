@@ -12,7 +12,7 @@ export async function render(req: Request, res: Response) {
 
   try {
     const data = await getData(data_type) as responeData
-    const html = renderTemplate(type, name, data.data);
+    const html = renderTemplate(type, name, data);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send(html);
   } catch (err: any) {
