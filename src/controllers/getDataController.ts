@@ -1,42 +1,33 @@
 import { Request, Response } from 'express';
-import { fetchJson } from '../services/httpClient';
-import { REQUEST_OPTIONS } from '../config/request_options'
-import { promises as fs } from 'fs'
-import path from 'path'
+import { getGameData, getNewsData } from '../services/getDataServices'
 
-const getGameData = async (req: Request, res: Response) => {
-    try {
-        const filePath = path.resolve(process.cwd(), REQUEST_OPTIONS.GET_GMAE_URL)
-        const text = await fs.readFile(filePath, 'utf8')
-        const json = JSON.parse(text)
-        res.json({
-            status: 'ok',
+type DataType = 'games' | 'news'
+const isDataType = (v: unknown): v is DataType => v === 'games' || v === 'news'
+
+
+export const getData = async (req: Request, res: Response<responeData>): Promise<void> => {
+    const typeParam = req.query.type
+    if (!isDataType(typeParam)) {
+        res.status(400).json({
+            status: 'error',
             uptime: process.uptime(),
-            data: json
+            data: null,
+            message: '缺少或无效的参数: type'
         })
-    } catch (err: any) {
-        res.status(500).json({ error: err?.message || '读取本地数据失败' })
+        return
     }
-}
-const getNewsData = async (req: Request, res: Response) => {
-    const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
-        method: "POST", data: {
-            "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
-        }
-    });
+    let resData: Object = {}
+    if (typeParam === 'games') {
+        resData = await getGameData()
+
+    }
+    if (typeParam === 'news') {
+        resData = await getNewsData()
+    }
     res.json({
         status: 'ok',
         uptime: process.uptime(),
-        data: response.data
+        message: 'Hello, Express + TypeScript!',
+        data: resData
     })
-}
-export const getData = async (req: Request, res: Response) => {
-    const data_type = req.query.type as "games" | "news"
-    if (data_type == "games") {
-        return await getGameData(req, res)
-    }
-    else if (data_type == "news") {
-        return await getNewsData(req, res)
-    }
-    res.status(400).json({ error: '缺少或无效的参数: type' })
 }

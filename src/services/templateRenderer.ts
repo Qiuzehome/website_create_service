@@ -33,6 +33,7 @@ function resolveTemplatePath(type: string, name: string): string {
 
 export function renderTemplate(type: string, name: string, data: any): string {
   ensureEnv()
+  console.log('数据', data)
   const relPath = resolveTemplatePath(type, name)
   return env!.render(relPath, data)
 }
