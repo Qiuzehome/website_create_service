@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import path from 'path';
 import dotenv from 'dotenv';
 import { root } from './controllers/homeController';
 import { render } from './controllers/renderController';
@@ -11,6 +12,7 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use('/tpl_static', express.static(path.resolve(process.cwd(), 'tpl', 'tpl_static')));
 
 // 路由
 app.get('/', root);
