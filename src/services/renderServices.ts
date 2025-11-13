@@ -35,6 +35,20 @@ export function renderTemplate(type: string, name: string, data: any): string {
   ensureEnv()
   console.log('数据', data)
   const relPath = resolveTemplatePath(type, name)
-  return env!.render(relPath, data)
+  const html = env!.render(relPath, data)
+  generateDist(html)
+  return html
 }
 
+async function generateDist(code: string) {
+  const projectRoot = process.cwd()
+  const outputDir = path.join(projectRoot, 'dist')
+  const outputPath = path.join(outputDir, 'index.html')
+  try {
+    await fs.promises.mkdir(outputDir, { recursive: true })
+    await fs.promises.writeFile(outputPath, code, 'utf8')
+    console.log('文件写入成功')
+  } catch (err) {
+    console.error('写入文件失败:', err)
+  }
+}
