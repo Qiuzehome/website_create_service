@@ -1,21 +1,22 @@
 import { Request, Response } from 'express';
 import { fetchJson } from '../services/httpClient';
 import { REQUEST_OPTIONS } from '../config/request_options'
-import fs from 'fs'
+import { promises as fs } from 'fs'
+import path from 'path'
 
 const getGameData = async (req: Request, res: Response) => {
-    const response = fs.readFile(REQUEST_OPTIONS.GET_GMAE_URL, 'utf8', (err, data) => {
-        if (err) {
-            console.error('读取文件时出错:', err);
-            return;
-        }
-        console.log('文件内容:', data);
-    });
-    res.json({
-        status: 'ok',
-        uptime: process.uptime(),
-        data: response
-    })
+    try {
+        const filePath = path.resolve(process.cwd(), REQUEST_OPTIONS.GET_GMAE_URL)
+        const text = await fs.readFile(filePath, 'utf8')
+        const json = JSON.parse(text)
+        res.json({
+            status: 'ok',
+            uptime: process.uptime(),
+            data: json
+        })
+    } catch (err: any) {
+        res.status(500).json({ error: err?.message || '读取本地数据失败' })
+    }
 }
 const getNewsData = async (req: Request, res: Response) => {
     const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
