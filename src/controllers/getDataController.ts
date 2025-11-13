@@ -1,16 +1,20 @@
 import { Request, Response } from 'express';
 import { fetchJson } from '../services/httpClient';
 import { REQUEST_OPTIONS } from '../config/request_options'
+import fs from 'fs'
 
 const getGameData = async (req: Request, res: Response) => {
-    const response = await fetchJson(REQUEST_OPTIONS.GET_GMAE_URL, {
-        method: "GET"
+    const response = fs.readFile(REQUEST_OPTIONS.GET_GMAE_URL, 'utf8', (err, data) => {
+        if (err) {
+            console.error('读取文件时出错:', err);
+            return;
+        }
+        console.log('文件内容:', data);
     });
-
     res.json({
         status: 'ok',
         uptime: process.uptime(),
-        data: response.data
+        data: response
     })
 }
 const getNewsData = async (req: Request, res: Response) => {
