@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import dotenv from 'dotenv';
 import { root } from './controllers/homeController';
-import { health } from './controllers/healthController';
 import { render } from './controllers/renderController';
 import { getData } from './controllers/getDataController'
 dotenv.config();
@@ -16,7 +15,6 @@ app.use(express.urlencoded({ extended: true }));
 // 路由
 app.get('/', root);
 
-app.get('/health', health);
 
 app.get('/getData', getData);
 // 模板渲染路由：/render/:type/:name?api=<third_party_json_url>
