@@ -24,7 +24,7 @@ function ensureTplIndex() {
 
 function resolveTemplatePath(type: string, name: string): string {
   ensureTplIndex()
-  const found = tplIndex!.find(e => e.type === type && e.name === name)
+  const found = tplIndex!.find(e => e.type === `${type}/${name}`)
   if (!found) {
     throw new Error(`Template not found: ${type}/${name}`)
   }

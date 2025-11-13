@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { root } from './controllers/homeController';
 import { health } from './controllers/healthController';
 import { render } from './controllers/renderController';
-
+import { getNewsData } from './controllers/getDataController'
 dotenv.config();
 
 const app = express();
@@ -18,6 +18,7 @@ app.get('/', root);
 
 app.get('/health', health);
 
+app.get('/getNewsData', getNewsData);
 // 模板渲染路由：/render/:type/:name?api=<third_party_json_url>
 app.get('/render/:type/:name', render);
 
