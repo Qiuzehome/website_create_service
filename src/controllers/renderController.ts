@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { renderTemplate } from '../services/templateRenderer';
+import { renderTemplate } from '../services/renderServices';
 import { getData } from '../services/getDataServices'
 
 export async function render(req: Request, res: Response) {
