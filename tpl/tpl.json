@@ -1,1 +1,50 @@
-[{"type":"agreement","name":"default","path":"agreement/default.njk"},{"type":"category","name":"default","path":"category/default.njk"},{"type":"detail","name":"default","path":"detail/default.njk"},{"type":"detail/news","name":"index","path":"detail/news/index.njk"},{"type":"home","name":"default","path":"home/default.njk"},{"type":"home/games","name":"index","path":"home/games/index.njk"},{"type":"home/news","name":"index","path":"home/news/index.njk"},{"type":"layouts","name":"base","path":"layouts/base.njk"}]
+[
+  {
+    "type": "agreement",
+    "name": "default",
+    "path": "agreement/default.njk",
+    "css": ""
+  },
+  {
+    "type": "category",
+    "name": "default",
+    "path": "category/default.njk",
+    "css": ""
+  },
+  {
+    "type": "detail",
+    "name": "default",
+    "path": "detail/default.njk",
+    "css": ""
+  },
+  {
+    "type": "detail/news",
+    "name": "index",
+    "path": "detail/news/index.njk",
+    "css": ""
+  },
+  {
+    "type": "home",
+    "name": "default",
+    "path": "home/default.njk",
+    "css": ""
+  },
+  {
+    "type": "home/games",
+    "name": "index",
+    "path": "home/games/index.njk",
+    "css": ""
+  },
+  {
+    "type": "home/news",
+    "name": "index",
+    "path": "home/news/index.njk",
+    "css": ""
+  },
+  {
+    "type": "layouts",
+    "name": "base",
+    "path": "layouts/base.njk",
+    "css": ""
+  }
+]
