@@ -19,6 +19,12 @@ class Games_Data {
             throw new Error(err?.message || '读取本地数据失败')
         }
     }
+    getDetailData(id: number) {
+        return this.data.list.filter(item => item.id = id)
+    }
+    getCategoryList(categoryId: number) {
+        return this.data.list.filter(item => item.categoryId = categoryId)
+    }
 }
 
 class News_Data {
@@ -39,10 +45,11 @@ class News_Data {
         return res ?? null
     }
 
-    async getCategoryList(): Promise<{}> {
+    async getCategoryList(categoryId: string): Promise<{}> {
         const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_CATEGORY_URL, {
             method: "POST", data: {
-                "domain": this.domain
+                "domain": this.domain,
+                "categoryId": categoryId
             }
         });
         const res = response?.data
@@ -61,10 +68,6 @@ class News_Data {
     async getDataByCategory(categoryId: number) {
         return this.data.list.filter((item) => item.categoryId == categoryId)
     }
-}
-
-export function isNewsData(instance: News_Data | Games_Data): instance is News_Data {
-    return 'getDetailData' in instance;
 }
 
 export const getData = async (page: string, name: string, data: DataType, domain?: string): Promise<News_Data | Games_Data> => {

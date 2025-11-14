@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { isNewsData } from "../services/getDataServices"
 import { renderTemplate, copyStaticSource } from '../services/renderServices';
 import { getData } from '../services/getDataServices'
 
@@ -14,7 +13,7 @@ export async function render(req: Request, res: Response) {
   try {
     const instance = await getData(page, name, data, domain)
     // let html = ''
-    if (page == "detail" && isNewsData(instance)) {
+    if (page == "detail") {
       const promise = instance.data.list.map(async item => {
         const detail = await instance.getDetailData(item.id)
         instance.data.detail = detail
