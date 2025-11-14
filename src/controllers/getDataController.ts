@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-// import { getGameData, getNewsData } from '../services/getDataServices'
+import { getData as getFetchData } from '../services/getDataServices'
 
 const isDataType = (v: unknown): v is DataType => v === 'games' || v === 'news'
 
 
 export const getData = async (req: Request, res: Response<responeData>): Promise<void> => {
-    const typeParam = req.query.type
-    if (!isDataType(typeParam)) {
+    const { page, name, type } = req.query as { page: string, name: string, type: "games" | "news" }
+    if (!isDataType(type)) {
         res.status(400).json({
             status: 'error',
             uptime: process.uptime(),
@@ -16,13 +16,9 @@ export const getData = async (req: Request, res: Response<responeData>): Promise
         return
     }
     let resData: Object = {}
-    if (typeParam === 'games') {
-        // resData = await getGameData()
+    const data = await getFetchData(page, name, type) as { data: NEWS_DATA | GAMES_DATA }
+    resData = data.data
 
-    }
-    if (typeParam === 'news') {
-        // resData = await getNewsData()
-    }
     res.json({
         status: 'ok',
         uptime: process.uptime(),

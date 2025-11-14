@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import fs from "fs"
 import { renderTemplate, copyStaticSource } from '../services/renderServices';
 import { getData } from '../services/getDataServices'
 
