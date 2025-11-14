@@ -13,39 +13,40 @@ export const getGameData = async (): Promise<{}> => {
         throw new Error(err?.message || '读取本地数据失败')
     }
 }
-export const getNewsData = async (): Promise<{}> => {
-    const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
-        method: "POST", data: {
-            "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
+class Games_Data {
+    constructor() {
+        this.data = {} as GAMES_DATA
+    }
+    data: GAMES_DATA
+    async getDataLIst(): Promise<GAMES_DATA> {
+        try {
+            const filePath = path.resolve(process.cwd(), REQUEST_OPTIONS.GET_GMAE_URL)
+            const text = await fs.readFile(filePath, 'utf8')
+            const data = JSON.parse(text)
+            this.data = data
+            return data
+        } catch (err: any) {
+            throw new Error(err?.message || '读取本地数据失败')
         }
-    });
-    const datalist = response?.data
-    return datalist ?? null
+    }
 }
+// export const getNewsData = async (): Promise<{}> => {
+//     const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
+//         method: "POST", data: {
+//             "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
+//         }
+//     });
+//     const datalist = response?.data
+//     return datalist ?? null
+// }
 
-type NEWS_DATA = {
-    total: number,
-    pages: number,
-    size: number,
-    pageSize: number,
-    list: [{
-        img: string,
-        author: string,
-        showTime: string,
-        id: number,
-        title: string,
-        category: string,
-        categoryId: number,
-        content: string
-    }]
-}
+
 class NewsData {
     constructor() {
-        this.data = { list: [{}] }
-        this.getDataLIst()
+        this.data = {} as NEWS_DATA
     }
     data: NEWS_DATA | { list: [any] }
-    async getDataLIst(): Promise<{}> {
+    async getDataLIst(): Promise<NEWS_DATA> {
         const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
             method: "POST", data: {
                 "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
@@ -81,13 +82,24 @@ class NewsData {
 }
 
 
-export const getData = async (page: string, name: string, type: DataType): Promise<{}> => {
+export const getData = async (page: string, name: string, type: DataType): Promise<NewsData | Games_Data> => {
     if (type === 'games') {
-        return await getGameData()
+        const instance = new Games_Data();
+        instance.data = await instance.getDataLIst();
+        return instance
+        // return await getGameData()
     }
     if (type === 'news') {
-        const Data = new NewsData()
-        return await Data.getDataLIst()
+        const instance = new NewsData();
+        instance.data = await instance.getDataLIst();
+        return instance
+        // const Data = new NewsData()
+        // if (page == "detail") {
+        //     Data.data.list.map(async item => {
+        //         await Data.getDetailData(item.id)
+        //     })
+        // }
+        // return await Data.getDataLIst()
     }
     throw new Error('无效的参数: type')
 }

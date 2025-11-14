@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ title }}{% endblock %}</title>
+  {% block head %}
+  <link rel="stylesheet" href="/static/css/output.css">
+  {% endblock %}
+</head>
+<body>
+  {% block header %}
+  <header class="site-header">
+    <div class="container">
+      <h1>{{ title }}</h1>
+      <nav>
+        <a href="/">首页</a>
+        <a href="/detail">详情页</a>
+        <a href="/category">分类页</a>
+        <a href="/agreement">协议页</a>
+      </nav>
+    </div>
+  </header>
+  {% endblock %}
+
+  <main class="main-content">
+    {% block content %}
+<div class="main">
+  <div class="main-page">
+    <h3>{{ detail.title }}</h3>
+    <p>{{ detail.author }}&nbsp;&nbsp;{{ detail.showTime }}</p>
+
+    <div class="ads1 info-ads"></div>
+    <div class="content-box">
+      <div class="left-column">
+        <div class="articles-box">
+          {{ detail.news.content | safe }}
+          <div class="ads3 multiple-ads"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="section mod-hidden">
+    <p class="latest">Recommended</p>
+    {% if list.length > 0 %}
+      <CardList list="{{ list }}" columns="3" show_desc="true" arr="[0, 20]" />
+    {% endif %}
+  </section>
+
+  <section class="section pc-hidden">
+    <p class="latest">Recommended</p>
+    {% if list.length > 0 %}
+      {% for item in list.slice(0, 20) %}
+        <Card data="{{ item }}" key="{{ loop.index0 }}" show_desc="true" />
+      {% endfor %}
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+  </main>
+
+  {% block footer %}
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; 2024 All rights reserved</p>
+    </div>
+  </footer>
+  {% endblock %}
+
+  {% block scripts %}
+  <script src="/static/js/common.js"></script>
+  {% endblock %}
+</body>
+</html>

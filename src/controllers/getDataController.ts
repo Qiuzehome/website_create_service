@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getGameData, getNewsData } from '../services/getDataServices'
+// import { getGameData, getNewsData } from '../services/getDataServices'
 
 const isDataType = (v: unknown): v is DataType => v === 'games' || v === 'news'
 
@@ -17,11 +17,11 @@ export const getData = async (req: Request, res: Response<responeData>): Promise
     }
     let resData: Object = {}
     if (typeParam === 'games') {
-        resData = await getGameData()
+        // resData = await getGameData()
 
     }
     if (typeParam === 'news') {
-        resData = await getNewsData()
+        // resData = await getNewsData()
     }
     res.json({
         status: 'ok',

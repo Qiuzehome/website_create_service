@@ -31,12 +31,13 @@ function resolveTemplatePath(type: string, name: string): string {
   return found.path
 }
 
-export function renderTemplate(type: string, name: string, data: any): string {
+export async function renderTemplate(page: string, name: string, data: any, pathName?: string | number): Promise<string> {
   ensureEnv()
-  console.log('数据', data)
-  const relPath = resolveTemplatePath(type, name)
+  const relPath = resolveTemplatePath(page, name)
+  // console.log('relPath:', data);
+
   const html = env!.render(relPath, data)
-  generateDist(html)
+  await generateDist(html, page, pathName)
   return html
 }
 
@@ -54,21 +55,36 @@ async function copyDir(src: string, dest: string) {
   }
 }
 
-async function generateDist(code: string) {
+export async function copyStaticSource() {
   const projectRoot = process.cwd()
   const outputDir = path.join(projectRoot, 'dist')
-  const outputPath = path.join(outputDir, 'index.html')
   const staticSrc = path.join(projectRoot, 'tpl', 'static')
   const staticDest = path.join(outputDir, 'static')
   try {
-    await fs.promises.mkdir(outputDir, { recursive: true })
+    const stat = await fs.promises.stat(staticSrc)
+    if (stat.isDirectory()) {
+      await copyDir(staticSrc, staticDest)
+    }
+  } catch (err) {
+    console.error('静态资源复制失败:', err)
+  }
+}
+
+async function generateDist(code: string, name: string, pathName?: string | number) {
+  let uriParts: string[] = [name];
+  if (pathName) {
+    uriParts.push(String(pathName)); // 确保 pathName 转为字符串
+  }
+  const uri = path.join(...uriParts);
+
+  const projectRoot = process.cwd()
+  const outputDir = path.join(projectRoot, 'dist')
+  const outputPath = path.join(outputDir, `${uri}.html`)
+
+  try {
+    await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
     await fs.promises.writeFile(outputPath, code, 'utf8')
-    try {
-      const stat = await fs.promises.stat(staticSrc)
-      if (stat.isDirectory()) {
-        await copyDir(staticSrc, staticDest)
-      }
-    } catch {}
+
     console.log('文件写入成功')
   } catch (err) {
     console.error('写入文件失败:', err)
