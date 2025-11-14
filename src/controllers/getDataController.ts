@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { getGameData, getNewsData } from '../services/getDataServices'
 
-type DataType = 'games' | 'news'
 const isDataType = (v: unknown): v is DataType => v === 'games' || v === 'news'
 
 

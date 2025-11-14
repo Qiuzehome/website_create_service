@@ -4,8 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}{{ title }} - 协议类页面{% endblock %}</title>
+  {% block link %}{{ link }}{% endblock %}
   {% block head %}
-  <link rel="stylesheet" href="/tpl_static/css/output.css">
+  <link rel="stylesheet" href="/static/css/output.css">
   {% endblock %}
 </head>
 <body>

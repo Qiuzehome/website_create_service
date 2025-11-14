@@ -58,8 +58,8 @@ async function generateDist(code: string) {
   const projectRoot = process.cwd()
   const outputDir = path.join(projectRoot, 'dist')
   const outputPath = path.join(outputDir, 'index.html')
-  const staticSrc = path.join(projectRoot, 'tpl', 'tpl_static')
-  const staticDest = path.join(outputDir, 'tpl_static')
+  const staticSrc = path.join(projectRoot, 'tpl', 'static')
+  const staticDest = path.join(outputDir, 'static')
   try {
     await fs.promises.mkdir(outputDir, { recursive: true })
     await fs.promises.writeFile(outputPath, code, 'utf8')

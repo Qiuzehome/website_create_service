@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 // 中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use('/tpl_static', express.static(path.resolve(process.cwd(), 'tpl', 'tpl_static')));
+app.use('/static', express.static(path.resolve(process.cwd(), 'tpl', 'static')));
 
 // 路由
 app.get('/', root);
@@ -20,7 +20,7 @@ app.get('/', root);
 
 app.get('/getData', getData);
 // 模板渲染路由：/render/:type/:name?api=<third_party_json_url>
-app.get('/render/:type/:name', render);
+app.get('/render', render);
 
 // 启动服务器
 app.listen(PORT, () => {

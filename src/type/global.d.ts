@@ -5,3 +5,4 @@ interface responeData {
     data: any;
     message?: string;
 }
+type DataType = 'games' | 'news'

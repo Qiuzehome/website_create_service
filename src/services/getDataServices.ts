@@ -19,15 +19,75 @@ export const getNewsData = async (): Promise<{}> => {
             "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
         }
     });
-    return response?.data ?? null
+    const datalist = response?.data
+    return datalist ?? null
 }
-type DataType = 'games' | 'news'
-export const getData = async (type: DataType): Promise<{}> => {
+
+type NEWS_DATA = {
+    total: number,
+    pages: number,
+    size: number,
+    pageSize: number,
+    list: [{
+        img: string,
+        author: string,
+        showTime: string,
+        id: number,
+        title: string,
+        category: string,
+        categoryId: number,
+        content: string
+    }]
+}
+class NewsData {
+    constructor() {
+        this.data = { list: [{}] }
+        this.getDataLIst()
+    }
+    data: NEWS_DATA | { list: [any] }
+    async getDataLIst(): Promise<{}> {
+        const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
+            method: "POST", data: {
+                "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
+            }
+        });
+        const res = response?.data
+        this.data = res
+        return res ?? null
+    }
+
+    async getCategoryList(): Promise<{}> {
+        const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_CATEGORY_URL, {
+            method: "POST", data: {
+                "domain": "hoxilk.net"
+            }
+        });
+        const res = response?.data
+        return res ?? null
+    }
+    async getDetailData(id: number): Promise<{}> {
+        const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_DETAIL_URL, {
+            method: "POST", data: {
+                "domain": "hoxilk.net",
+                "newsId": id
+            }
+        });
+        const res = response?.data
+        return res ?? null
+    }
+    async getDataByCategory(categoryId: number) {
+        return this.data.list.filter((item) => item.categoryId == categoryId)
+    }
+}
+
+
+export const getData = async (page: string, name: string, type: DataType): Promise<{}> => {
     if (type === 'games') {
         return await getGameData()
     }
     if (type === 'news') {
-        return await getNewsData()
+        const Data = new NewsData()
+        return await Data.getDataLIst()
     }
     throw new Error('无效的参数: type')
 }
