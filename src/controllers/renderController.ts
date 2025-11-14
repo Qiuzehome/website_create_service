@@ -13,7 +13,7 @@ export async function render(req: Request, res: Response) {
 
   try {
     const instance = await getData(page, name, type)
-    let html = ''
+    // let html = ''
     if (page == "detail" && isNewsData(instance)) {
       const promise = instance.data.list.map(async item => {
         const detail = await instance.getDetailData(item.id)

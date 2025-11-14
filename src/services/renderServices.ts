@@ -34,7 +34,6 @@ function resolveTemplatePath(type: string, name: string): string {
 export async function renderTemplate(page: string, name: string, data: any, pathName?: string | number): Promise<string> {
   ensureEnv()
   const relPath = resolveTemplatePath(page, name)
-  // console.log('relPath:', data);
 
   const html = env!.render(relPath, data)
   await generateDist(html, page, pathName)
@@ -84,8 +83,6 @@ async function generateDist(code: string, name: string, pathName?: string | numb
   try {
     await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
     await fs.promises.writeFile(outputPath, code, 'utf8')
-
-    console.log('文件写入成功')
   } catch (err) {
     console.error('写入文件失败:', err)
   }
