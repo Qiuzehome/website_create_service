@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import path from 'path';
 import dotenv from 'dotenv';
 import { root } from './controllers/homeController';

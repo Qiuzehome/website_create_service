@@ -22,14 +22,16 @@ class Games_Data {
 }
 
 class News_Data {
-    constructor() {
+    constructor(domain: string = "hoxilk.net") {
+        this.domain = domain
         this.data = {} as NEWS_DATA
     }
+    domain: string
     data: NEWS_DATA
     async getDataLIst(): Promise<NEWS_DATA> {
         const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_LISTS_URL, {
             method: "POST", data: {
-                "pageSize": 1000, "page": 1, "domain": "hoxilk.net"
+                "pageSize": 1000, "page": 1, "domain": this.domain
             }
         });
         const res = response?.data
@@ -40,7 +42,7 @@ class News_Data {
     async getCategoryList(): Promise<{}> {
         const response = await fetchJson(REQUEST_OPTIONS.GET_NEWS_CATEGORY_URL, {
             method: "POST", data: {
-                "domain": "hoxilk.net"
+                "domain": this.domain
             }
         });
         const res = response?.data
@@ -65,16 +67,16 @@ export function isNewsData(instance: News_Data | Games_Data): instance is News_D
     return 'getDetailData' in instance;
 }
 
-export const getData = async (page: string, name: string, type: DataType): Promise<News_Data | Games_Data> => {
-    if (type === 'games') {
+export const getData = async (page: string, name: string, data: DataType, domain?: string): Promise<News_Data | Games_Data> => {
+    if (data === 'games') {
         const instance = new Games_Data();
         instance.data = await instance.getDataLIst();
         return instance
     }
-    if (type === 'news') {
-        const instance = new News_Data();
+    if (data === 'news') {
+        const instance = new News_Data(domain);
         instance.data = await instance.getDataLIst();
         return instance
     }
-    throw new Error('无效的参数: type')
+    throw new Error('无效的参数: data')
 }

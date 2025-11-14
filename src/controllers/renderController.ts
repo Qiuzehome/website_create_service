@@ -5,14 +5,14 @@ import { getData } from '../services/getDataServices'
 
 
 export async function render(req: Request, res: Response) {
-  const { page, name, type } = req.query as { page: string, name: string, type: "games" | "news" }
-  if (!type) {
-    res.status(400).json({ error: '缺少参数: data_type' });
+  const { page, name, data, domain } = req.query as { page: string, name: string, data: "games" | "news", domain?: string }
+  if (!data) {
+    res.status(400).json({ error: '缺少参数: data' });
     return;
   }
 
   try {
-    const instance = await getData(page, name, type)
+    const instance = await getData(page, name, data, domain)
     // let html = ''
     if (page == "detail" && isNewsData(instance)) {
       const promise = instance.data.list.map(async item => {
