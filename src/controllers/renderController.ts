@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
+import { isNewsData } from "../services/getDataServices"
 import { renderTemplate, copyStaticSource } from '../services/renderServices';
 import { getData } from '../services/getDataServices'
+
 
 export async function render(req: Request, res: Response) {
   const { page, name, type } = req.query as { page: string, name: string, type: "games" | "news" }
@@ -10,19 +12,20 @@ export async function render(req: Request, res: Response) {
   }
 
   try {
-    const data = await getData(page, name, type) as { data: NEWS_DATA | GAMES_DATA }
+    const instance = await getData(page, name, type)
     let html = ''
-    if (page == "detail") {
-      data.data.list.map(async item => {
-        html = await renderTemplate(page, name, data, item.id);
+    if (page == "detail" && isNewsData(instance)) {
+      const promise = instance.data.list.map(async item => {
+        const detail = await instance.getDetailData(item.id)
+        instance.data.detail = detail
+        return await renderTemplate(page, name, instance.data, item.id);
       })
+      await Promise.all(promise)
     } else if (page == "home") {
-      html = await renderTemplate(page, name, data.data);
+      await renderTemplate(page, name, instance.data);
     }
 
     await copyStaticSource()
-    // const data = await getData(page, name, type) as responeData
-    // const html = renderTemplate(page, name, data);
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.send({
       status: 'ok',
