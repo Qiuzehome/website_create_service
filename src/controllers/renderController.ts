@@ -1,9 +1,14 @@
 import { Request, Response } from 'express';
 import { renderTemplate, copyStaticSource } from '../services/renderServices';
 import { getData } from '../services/getDataServices'
-
+import fs from "fs"
+import path from "path"
 
 export async function render(req: Request, res: Response) {
+  const distPath = path.join(process.cwd(), 'dist');
+  if (fs.existsSync(distPath)) {
+    fs.rmSync(distPath, { recursive: true, force: true });
+  }
   const { q } = req.query as { q: string }
   if (!q) {
     res.status(400).json({ error: '缺少参数: data' });
