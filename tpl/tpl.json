@@ -24,21 +24,21 @@
     "css": ""
   },
   {
-    "type": "home",
+    "type": "index",
     "name": "default",
-    "path": "home/default.njk",
+    "path": "index/default.njk",
     "css": ""
   },
   {
-    "type": "home/games",
+    "type": "index/games",
     "name": "index",
-    "path": "home/games/index.njk",
+    "path": "index/games/index.njk",
     "css": ""
   },
   {
-    "type": "home/news",
+    "type": "index/news",
     "name": "index",
-    "path": "home/news/index.njk",
+    "path": "index/news/index.njk",
     "css": ""
   },
   {
