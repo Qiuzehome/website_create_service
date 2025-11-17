@@ -4,25 +4,32 @@ import { getData } from '../services/getDataServices'
 
 
 export async function render(req: Request, res: Response) {
-  const { page, name, data, domain } = req.query as { page: string, name: string, data: "games" | "news", domain?: string }
-  if (!data) {
+  const { q } = req.query as { q: string }
+  if (!q) {
     res.status(400).json({ error: '缺少参数: data' });
     return;
   }
+  const query: { data: DataType, domain: string, pages: { page: string, name: string }[] } = JSON.parse(q)
+
+  const { data, domain, pages } = query
 
   try {
-    const instance = await getData(page, name, data, domain)
+    const instance = await getData(data, domain)
     // let html = ''
-    if (page == "detail") {
-      const promise = instance.data.list.map(async item => {
-        const detail = await instance.getDetailData(item.id)
-        instance.data.detail = detail
-        return await renderTemplate(page, name, instance.data, item.id);
-      })
-      await Promise.all(promise)
-    } else if (page == "home") {
-      await renderTemplate(page, name, instance.data);
-    }
+    pages.forEach(async item => {
+      const { page, name } = item
+      if (page == "detail") {
+        const promise = instance.data.list.map(async item => {
+          const detail = await instance.getDetailData(item.id)
+          instance.data.detail = detail
+          return await renderTemplate(page, name, instance.data, item.id);
+        })
+        await Promise.all(promise)
+      } else {
+        await renderTemplate(page, name, instance.data);
+      }
+    })
+
 
     await copyStaticSource()
     res.setHeader('Content-Type', 'text/html; charset=utf-8');

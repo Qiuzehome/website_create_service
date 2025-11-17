@@ -41,6 +41,9 @@ class News_Data {
             }
         });
         const res = response?.data
+        if (!res) {
+            console.error("无响应数据")
+        }
         this.data = res
         return res ?? null
     }
@@ -70,7 +73,7 @@ class News_Data {
     }
 }
 
-export const getData = async (page: string, name: string, data: DataType, domain?: string): Promise<News_Data | Games_Data> => {
+export const getData = async (data: DataType, domain?: string): Promise<News_Data | Games_Data> => {
     if (data === 'games') {
         const instance = new Games_Data();
         instance.data = await instance.getDataLIst();
