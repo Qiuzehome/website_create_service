@@ -1,50 +1,47 @@
 [
   {
-    "type": "agreement",
+    "type": "about",
     "name": "default",
-    "path": "agreement/default.njk",
-    "css": ""
+    "path": "about/default.njk"
   },
   {
     "type": "category",
     "name": "default",
-    "path": "category/default.njk",
-    "css": ""
+    "path": "category/default.njk"
   },
   {
     "type": "detail",
-    "name": "default",
-    "path": "detail/default.njk",
-    "css": ""
-  },
-  {
-    "type": "detail/news",
-    "name": "index",
-    "path": "detail/news/index.njk",
-    "css": ""
+    "name": "news",
+    "path": "detail/news.njk"
   },
   {
     "type": "index",
     "name": "default",
-    "path": "index/default.njk",
-    "css": ""
+    "path": "index/default.njk"
   },
   {
-    "type": "index/games",
-    "name": "index",
-    "path": "index/games/index.njk",
-    "css": ""
+    "type": "index",
+    "name": "games",
+    "path": "index/games.njk"
   },
   {
-    "type": "index/news",
-    "name": "index",
-    "path": "index/news/index.njk",
-    "css": ""
+    "type": "index",
+    "name": "news",
+    "path": "index/news.njk"
   },
   {
     "type": "layouts",
     "name": "base",
-    "path": "layouts/base.njk",
-    "css": ""
+    "path": "layouts/base.njk"
+  },
+  {
+    "type": "privacy",
+    "name": "default",
+    "path": "privacy/default.njk"
+  },
+  {
+    "type": "terms",
+    "name": "default",
+    "path": "terms/default.njk"
   }
 ]
