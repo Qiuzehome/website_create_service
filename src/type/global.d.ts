@@ -22,6 +22,7 @@ interface GameItem {
 }
 
 interface GAMES_DATA {
+    domain: string,
     detail?: {},
     list: GameItem[];
 }
@@ -41,6 +42,7 @@ interface NEWS_DATA {
     pages: number,
     size: number,
     pageSize: number,
+    domain: string,
     detail?: {},
     list: NEWS_ITEM[]
 }

@@ -1,7 +1,7 @@
 [
   {
     "type": "about",
-    "name": "default",
+    "name": "news",
     "path": "about/news.njk"
   },
   {
@@ -36,12 +36,12 @@
   },
   {
     "type": "privacy",
-    "name": "default",
+    "name": "news",
     "path": "privacy/news.njk"
   },
   {
     "type": "terms",
-    "name": "default",
+    "name": "news",
     "path": "terms/news.njk"
   }
 ]

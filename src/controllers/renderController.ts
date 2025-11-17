@@ -17,13 +17,15 @@ export async function render(req: Request, res: Response) {
   }
   const query: { data: DataType, domain: string, pages: { page: string, name: string }[] } = JSON.parse(q)
 
-  const { data, domain, pages } = query
+  const { data, domain = "hoxilk.net", pages } = query
 
   try {
     const instance = await getData(data, domain)
+    instance.data.domain = domain
     // let html = ''
     pages.forEach(async item => {
       const { page, name } = item
+
       if (page == "detail") {
         const promise = instance.data.list.map(async item => {
           const detail = await instance.getDetailData(item.id)

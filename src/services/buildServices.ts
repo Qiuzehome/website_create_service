@@ -2,6 +2,16 @@ import { minify } from 'html-minifier-terser'
 import path from "path"
 import fs from "fs"
 
+const minifyConfig = {
+    collapseWhitespace: true,
+    removeComments: true,
+    removeRedundantAttributes: true,
+    removeEmptyAttributes: true,
+    minifyCSS: true,
+    minifyJS: true,
+    sortAttributes: true,
+    sortClassName: true
+}
 async function copyDir(src: string, dest: string) {
     await fs.promises.mkdir(dest, { recursive: true })
     const entries = await fs.promises.readdir(src, { withFileTypes: true })
@@ -34,7 +44,7 @@ export async function copyStaticSource() {
 export async function generateDist(code: string, name: string, pathName?: string | number) {
     let uriParts: string[] = [name];
     if (pathName) {
-        uriParts.push(String(pathName)); // 确保 pathName 转为字符串
+        uriParts.push(String(pathName));
     }
     const uri = path.join(...uriParts);
 
@@ -43,17 +53,7 @@ export async function generateDist(code: string, name: string, pathName?: string
     const outputPath = path.join(outputDir, `${uri}.html`)
 
     try {
-        // 对HTML代码进行压缩和tree-shaking（去除无用内容和简化）
-        const minifiedHtml = await minify(code, {
-            collapseWhitespace: true,
-            removeComments: true,
-            removeRedundantAttributes: true,
-            removeEmptyAttributes: true,
-            minifyCSS: true,
-            minifyJS: true,
-            sortAttributes: true,
-            sortClassName: true
-        });
+        const minifiedHtml = await minify(code, minifyConfig);
 
         await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
         await fs.promises.writeFile(outputPath, minifiedHtml, 'utf8')
