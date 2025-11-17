@@ -5,7 +5,7 @@ const isDataType = (v: unknown): v is DataType => v === 'games' || v === 'news'
 
 
 export const getData = async (req: Request, res: Response<responeData>): Promise<void> => {
-    const { page, name, type } = req.query as { page: string, name: string, type: "games" | "news" }
+    const { type } = req.query as { type: "games" | "news" }
     if (!isDataType(type)) {
         res.status(400).json({
             status: 'error',
@@ -16,7 +16,7 @@ export const getData = async (req: Request, res: Response<responeData>): Promise
         return
     }
     let resData: Object = {}
-    const data = await getFetchData(page, name, type) as { data: NEWS_DATA | GAMES_DATA }
+    const data = await getFetchData(type) as { data: NEWS_DATA | GAMES_DATA }
     resData = data.data
 
     res.json({
