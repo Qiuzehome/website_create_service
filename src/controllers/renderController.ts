@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { renderTemplate, copyStaticSource } from '../services/renderServices';
+import { renderTemplate } from '../services/renderServices';
+import { copyStaticSource } from "../services/buildServices"
 import { getData } from '../services/getDataServices'
 import fs from "fs"
 import path from "path"
