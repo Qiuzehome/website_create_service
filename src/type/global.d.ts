@@ -1,4 +1,4 @@
-
+declare module 'cors';
 interface responeData {
     status: 'ok' | 'error';
     uptime?: number;
