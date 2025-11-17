@@ -1,3 +1,4 @@
+import { minify } from 'html-minifier-terser'
 import path from "path"
 import fs from "fs"
 
@@ -27,5 +28,36 @@ export async function copyStaticSource() {
         }
     } catch (err) {
         console.error('静态资源复制失败:', err)
+    }
+}
+
+export async function generateDist(code: string, name: string, pathName?: string | number) {
+    let uriParts: string[] = [name];
+    if (pathName) {
+        uriParts.push(String(pathName)); // 确保 pathName 转为字符串
+    }
+    const uri = path.join(...uriParts);
+
+    const projectRoot = process.cwd()
+    const outputDir = path.join(projectRoot, 'dist')
+    const outputPath = path.join(outputDir, `${uri}.html`)
+
+    try {
+        // 对HTML代码进行压缩和tree-shaking（去除无用内容和简化）
+        const minifiedHtml = await minify(code, {
+            collapseWhitespace: true,
+            removeComments: true,
+            removeRedundantAttributes: true,
+            removeEmptyAttributes: true,
+            minifyCSS: true,
+            minifyJS: true,
+            sortAttributes: true,
+            sortClassName: true
+        });
+
+        await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
+        await fs.promises.writeFile(outputPath, minifiedHtml, 'utf8')
+    } catch (err) {
+        console.error('写入文件失败:', err)
     }
 }

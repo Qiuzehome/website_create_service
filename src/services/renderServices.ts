@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import nunjucks from 'nunjucks'
+import { generateDist } from "./buildServices"
 
 type TplEntry = { type: string; name: string; path: string }
 
@@ -38,24 +39,4 @@ export async function renderTemplate(page: string, name: string, data: any, path
   const html = env!.render(relPath, data)
   await generateDist(html, page, pathName)
   return html
-}
-
-
-async function generateDist(code: string, name: string, pathName?: string | number) {
-  let uriParts: string[] = [name];
-  if (pathName) {
-    uriParts.push(String(pathName)); // 确保 pathName 转为字符串
-  }
-  const uri = path.join(...uriParts);
-
-  const projectRoot = process.cwd()
-  const outputDir = path.join(projectRoot, 'dist')
-  const outputPath = path.join(outputDir, `${uri}.html`)
-
-  try {
-    await fs.promises.mkdir(path.dirname(outputPath), { recursive: true });
-    await fs.promises.writeFile(outputPath, code, 'utf8')
-  } catch (err) {
-    console.error('写入文件失败:', err)
-  }
 }
